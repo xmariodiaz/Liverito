@@ -25,7 +25,7 @@ ENV DATABASE=$DATABASE
 # Your existing build steps
 
 RUN npm run build && \
-    npm run drizzle:generate
+   # npm run drizzle:generate
 
 # Stage 2: Production image
 FROM node:18-alpine
