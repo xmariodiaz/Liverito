@@ -113,7 +113,7 @@ docker
 
 docker build -t nextjs-app .
 docker run -p 8080:8080 \
-  -e DATABASE="postgresql://neondb_owner:npg_EUtczkHs3b6y@ep-fragrant-block-a5061tws-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require" \
-  -e GOOGLE_MAPS_API_KEY="AIzaSyB10WRT8D9dw3HyRw8xJ_2vK2OkUZkMMn8" \
+  -e DATABASE="postgresql://neondb_owner:npg_EUtcxxx@ep-fragrant-block-a5061tws-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require" \
+  -e GOOGLE_MAPS_API_KEY="AIzaSyB10WRT8D9dw3HyRw8xJ_2xxxxxxxxx" \
   -e NODE_ENV=development \
   nextjs-app
