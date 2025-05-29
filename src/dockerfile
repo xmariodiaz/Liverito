@@ -48,7 +48,7 @@ COPY --from=builder /app/src ./src
 RUN npm run drizzle:generate && npm run build
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/drizzle.config.ts ./
-#COPY --from=builder /app/.env.production ./.env
+
 
 # Environment variables
 #ENV NODE_ENV=production
