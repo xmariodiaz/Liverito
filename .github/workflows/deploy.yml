@@ -31,7 +31,7 @@ jobs:
         docker build \
           --file src/Dockerfile \
           -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/liverito:${{ github.sha }} \
-          src
+          .
 
     - name: Push to Container Registry
       run: |
