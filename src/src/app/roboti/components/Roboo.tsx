@@ -13,8 +13,8 @@ interface RobooProps {
 
 export default function Roboo({ robots, height = "400px" }: RobooProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const googleMap = useRef<google.maps.Map>();
-  const infoWindow = useRef<google.maps.InfoWindow>();
+  const googleMap = useRef<google.maps.Map>(null);
+  const infoWindow = useRef<google.maps.InfoWindow>(null);
   const markersRef = useRef<google.maps.Marker[]>([]);
 
   useEffect(() => {
@@ -38,6 +38,7 @@ export default function Roboo({ robots, height = "400px" }: RobooProps) {
 
     // Add new markers
     robots.forEach((robot) => {
+      if (!robot.lastKnownLocation) return;  // ToDo: Clear the mess - Machete
       const [latStr, lngStr] = robot.lastKnownLocation.split(",").map((s) => s.trim());
       const lat = parseFloat(latStr);
       const lng = parseFloat(lngStr);
@@ -82,7 +83,7 @@ export default function Roboo({ robots, height = "400px" }: RobooProps) {
     <>
       {/* Load Maps JS API */}
       <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY} // TODO: Secure this apiKey in GCP
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`} // TODO: Secure this apiKey in GCP
         strategy="beforeInteractive"
       />
       <div

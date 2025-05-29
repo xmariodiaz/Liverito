@@ -84,7 +84,7 @@ export default function Roboo({ robots, height = "400px" }: RobooProps) {
     <>
       {/* Load Maps JS API */}
       <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY} // TODO: Secure this apiKey in GCP
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`} // TODO: Secure this apiKey in GCP
         strategy="beforeInteractive"
       />
       <div
