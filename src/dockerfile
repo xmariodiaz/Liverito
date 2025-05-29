@@ -18,6 +18,12 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # 4. Build the application and generate Drizzle files
+# Accept the build argument
+ARG DATABASE
+# Set as environment variable
+ENV DATABASE=$DATABASE
+# Your existing build steps
+
 RUN npm run build && \
     npm run drizzle:generate
 
@@ -38,11 +44,6 @@ COPY --from=builder /app/src ./src
 #COPY --from=builder /app/db ./db
 
 # 3. Copy configuration files
-# Accept the build argument
-ARG DATABASE
-# Set as environment variable
-ENV DATABASE=$DATABASE
-# Your existing build steps
 
 RUN npm run drizzle:generate && npm run build
 COPY --from=builder /app/package.json ./
