@@ -38,6 +38,13 @@ COPY --from=builder /app/src ./src
 #COPY --from=builder /app/db ./db
 
 # 3. Copy configuration files
+# Accept the build argument
+ARG DATABASE
+# Set as environment variable
+ENV DATABASE=$DATABASE
+# Your existing build steps
+
+RUN npm run drizzle:generate && npm run build
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/drizzle.config.ts ./
 COPY --from=builder /app/.env.production ./.env

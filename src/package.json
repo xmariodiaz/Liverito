@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start -p 8080",
     "lint": "next lint",
-    "drizzle:generate": "drizzle-kit generate",
-    "drizzle:studio": "drizzle-kit studio",
+    "drizzle:generate": "drizzle-kit generate:pg --config drizzle.config.ts",
+    "drizzle:generate:ci": "echo 'Skipping DB generation in CI'",
     "seed": "tsx src/db/scripts/seed.ts"
+
   },
   "dependencies": {
     "@types/pg": "^8.15.2",
