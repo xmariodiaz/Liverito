@@ -1,5 +1,5 @@
 {
-  "id": "4ff4f42e-ef66-4eb3-b455-dbea96779632",
+  "id": "d8985e4f-043f-4c64-b915-17504ad98eac",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -61,13 +61,13 @@
           "name": "clientId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "restaurantId": {
           "name": "restaurantId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "robotId": {
           "name": "robotId",
@@ -227,7 +227,7 @@
           "type": "robot_status",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "lastKnownLocation": {
           "name": "lastKnownLocation",
@@ -266,14 +266,14 @@
         "AsianFood",
         "IndianFood",
         "CaribeanFood",
-        "Cuy",
         "Mexican",
         "Colombian",
         "Steak",
         "Icecream",
         "Pizza",
         "Vegan",
-        "Healthy"
+        "Healthy",
+        "Italian"
       ]
     },
     "public.robot_status": {

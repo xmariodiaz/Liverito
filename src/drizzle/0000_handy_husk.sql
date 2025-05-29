@@ -1,5 +1,5 @@
 CREATE TYPE "public"."order_status" AS ENUM('pending', 'assigned', 'picked_up', 'delivered', 'completed');--> statement-breakpoint
-CREATE TYPE "public"."restoCategory" AS ENUM('Chicken', 'Burgers', 'AsianFood', 'IndianFood', 'CaribeanFood', 'Cuy', 'Mexican', 'Colombian', 'Steak', 'Icecream', 'Pizza', 'Vegan', 'Healthy');--> statement-breakpoint
+CREATE TYPE "public"."restoCategory" AS ENUM('Chicken', 'Burgers', 'AsianFood', 'IndianFood', 'CaribeanFood', 'Mexican', 'Colombian', 'Steak', 'Icecream', 'Pizza', 'Vegan', 'Healthy', 'Italian');--> statement-breakpoint
 CREATE TYPE "public"."robot_status" AS ENUM('available', 'busy', 'offline');--> statement-breakpoint
 CREATE TABLE "client" (
 	"id" serial PRIMARY KEY NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE "client" (
 --> statement-breakpoint
 CREATE TABLE "order" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"clientId" integer,
-	"restaurantId" integer,
+	"clientId" integer NOT NULL,
+	"restaurantId" integer NOT NULL,
 	"robotId" integer,
 	"items" jsonb NOT NULL,
 	"createAt" timestamp DEFAULT now(),
@@ -33,7 +33,7 @@ CREATE TABLE "restaurant" (
 CREATE TABLE "robot" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"robotId" varchar(50),
-	"status" "robot_status",
+	"status" "robot_status" NOT NULL,
 	"lastKnownLocation" varchar(255)
 );
 --> statement-breakpoint

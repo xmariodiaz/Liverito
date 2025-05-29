@@ -32,7 +32,6 @@ export const restoCategoryEnum = pgEnum("restoCategory", [
   "AsianFood",
   "IndianFood",
   "CaribeanFood",
-  "Cuy",
   "Mexican",
   "Colombian",
   "Steak",
@@ -40,6 +39,7 @@ export const restoCategoryEnum = pgEnum("restoCategory", [
   "Pizza",
   "Vegan",
   "Healthy",
+  "Italian"
 ]);
 export type RestoCategory = (typeof restoCategoryEnum.enumValues)[number];
 export type Restaurant = typeof restaurant.$inferSelect; // to rewrite or update
