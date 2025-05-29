@@ -1,8 +1,8 @@
 'use client';
 import React, { useEffect, useMemo, useState } from "react";
-import { OrderStatus, order, restaurant, orderStatusEnum } from "@/db/schema";
+import { order, restaurant, orderStatusEnum } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
-
+import type {OrderStatus} from "@/db/schema"
 const statusOptions: OrderStatus[] = orderStatusEnum.enumValues;
 
 const statusDisplay: Record<OrderStatus, { color: string; emoji: string }> = {
@@ -12,16 +12,19 @@ const statusDisplay: Record<OrderStatus, { color: string; emoji: string }> = {
   delivered: { color: "text-emerald-500", emoji: "📦" },
   completed: { color: "text-slate-500", emoji: "✅" },
 };
+const getStatusDisplay = (status: OrderStatus | null) => {
+  return statusDisplay[status ?? "pending"]; // Default to "pending" if null
+};
 
 // Infer types from schema
 type Order = InferSelectModel<typeof order> & {
   restaurant?: {
-    name: string;
-    category: string;
+    name: string | null;
+    category: string | null;
   };
-  clientName?: string;
-  clientAddress?: string;
-  robotId?: number;
+  clientName?: string | null;
+  clientAddress?: string | null;
+  robotId?: number | null;
 };
 type Restaurant = InferSelectModel<typeof restaurant>;
 type Robot = {
@@ -189,7 +192,7 @@ export default function OrderDashboardPage() {
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
           <option value="all">All Categories</option>
-          {[...new Set(restaurants.map((r) => r.category))].map((cat) => (
+          {[...new Set(restaurants.map((r) => r.category).filter((cat): cat is Exclude<typeof cat, null> => cat !== null))].map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
@@ -228,11 +231,11 @@ export default function OrderDashboardPage() {
             <div>Client: {order.clientName}</div>
             <div>Restaurant: {order.restaurant?.name}</div>
             <div>Category: {order.restaurant?.category}</div>
-            <div className={`mt-2 ${statusDisplay[order.status].color}`}>
-              {statusDisplay[order.status].emoji}
+            <div className={`mt-2 ${getStatusDisplay(order.status).color}`}>
+              {getStatusDisplay(order.status).emoji}
               <select
-                className={`ml-2 border p-1 rounded ${statusDisplay[order.status].color}`}
-                value={order.status}
+                className={`ml-2 border p-1 rounded ${getStatusDisplay(order.status).color}`}
+                value={order.status ?? "pending"}
                 disabled={order.status === "completed"}
                 onChange={(e) => updateStatus(order.id, order.clientId, e.target.value as OrderStatus)}
               >

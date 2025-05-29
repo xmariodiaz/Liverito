@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
-import { robot, robotStatusEnum,order,client,restaurant } from "@/db/schema";
-import type { Robot, NewRobot, RobotStatus } from "@/db/schema";
+import { robot, order,client,restaurant, robotStatusEnum } from "@/db/schema";
+import type { RobotStatus, Robot, NewRobot } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { inArray } from "drizzle-orm";
-import { sql } from 'drizzle-orm';
+
 const pgclient = new Client({ connectionString: process.env.DATABASE });
 await pgclient.connect();
 const db = drizzle(pgclient);
@@ -176,9 +176,9 @@ export async function GET(req: NextRequest) {
   }
 }
 */
-
-function isRobotStatus(value: any): value is "available" | "busy" | "offline" {
-  return ["available", "busy", "offline"].includes(value);
+const allowedRobotStatus: RobotStatus[] = robotStatusEnum.enumValues;
+function isRobotStatus(value: string | null): value is RobotStatus {
+  return value !== null && allowedRobotStatus.includes(value as RobotStatus);
 }
 
 // This new api will fetch the data creating joins with order restaurant and client and will throw a json with the data requested to avoid 

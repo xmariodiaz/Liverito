@@ -265,8 +265,8 @@ export async function PUT(req: NextRequest) {
  */
 
 const allowedCategories: RestoCategory[] = restoCategoryEnum.enumValues;
-function isRestoCategory(value: any): value is RestoCategory {
-  return allowedCategories.includes(value);
+function isRestoCategory(value: string | null): value is RestoCategory {
+  return value !== null && allowedCategories.includes(value as RestoCategory);
 }
 /**
  * @param /restaurants?category=Colombian

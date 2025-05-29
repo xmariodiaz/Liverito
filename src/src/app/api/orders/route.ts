@@ -183,7 +183,7 @@ export async function PUT(req: NextRequest) {
     }
 
     // Build update payload
-    const updateData: Record<string, any> = {};
+    const updateData: Record<string, string> = {};
     if (items) updateData.items = items;
     if (restaurantId) updateData.restaurantId = restaurantId;
     if (robotId) updateData.robotId = robotId;
@@ -342,12 +342,13 @@ export async function DELETE(req: NextRequest) {
 
 // GET /api/orders
 const allowedStatuses: OrderStatus[] = orderStatusEnum.enumValues;
-function isValidStatusOrder(value: any): value is OrderStatus {
-  return allowedStatuses.includes(value);
+function isValidStatusOrder(value: string | null): value is OrderStatus {
+  return value !== null && allowedStatuses.includes(value as OrderStatus);
 }
 export async function GET(req: NextRequest) {
   try {
     const clientIdParam = req.nextUrl.searchParams.get("clientId");
+    
     const statusParam = req.nextUrl.searchParams.get("status");
 
     const whereClause = [];
@@ -358,7 +359,7 @@ export async function GET(req: NextRequest) {
         whereClause.push(eq(order.clientId, clientId));
       }
     }
-
+    isValidStatusOrder(statusParam)
     if (statusParam && isValidStatusOrder(statusParam) ) {
       whereClause.push(eq(order.status, statusParam));
     }

@@ -1,0 +1,57 @@
+# Stage 1: Build the application
+FROM node:18-alpine AS builder
+WORKDIR /app
+
+# 1. Copy configuration files
+COPY package*.json ./
+COPY drizzle.config.ts ./
+COPY eslint.config.mjs ./
+COPY next-env.d.ts ./
+COPY next.config.ts ./
+COPY tsconfig.json ./
+COPY postcss.config.mjs ./
+
+# 2. Install dependencies (including devDependencies for build)
+RUN npm install --legacy-peer-deps
+ 
+# 3. Copy all source files
+COPY . .
+
+# 4. Build the application and generate Drizzle files
+RUN npm run build && \
+    npm run drizzle:generate
+
+# Stage 2: Production image
+FROM node:18-alpine
+WORKDIR /app
+
+# 1. Copy production dependencies
+COPY --from=builder /app/node_modules ./node_modules
+
+# 2. Copy built application
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/src ./src
+#COPY --from=builder /app/app ./app
+#COPY --from=builder /app/lib ./lib
+#COPY --from=builder /app/db ./db
+
+# 3. Copy configuration files
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/drizzle.config.ts ./
+COPY --from=builder /app/.env.production ./.env
+
+# Environment variables
+#ENV NODE_ENV=production
+ENV PORT=8080 
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
+
+# Expose the port (matches your start script)
+EXPOSE 8080
+
+# Start the application
+CMD ["npm", "start"]

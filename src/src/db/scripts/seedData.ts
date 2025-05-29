@@ -1,6 +1,5 @@
 import { InferInsertModel } from "drizzle-orm";
 import { restaurant, robot, order } from "../schema";
-import { date } from "drizzle-orm/mysql-core";
 
 /**
  * The location selected is the great Toronto Area

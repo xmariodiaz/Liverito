@@ -23,10 +23,10 @@ export default function APIDocs() {
               dark: '#e5e7eb', // Tailwind gray-200
               light: '#f3f4f6', // Tailwind gray-100
             },
-            background: {
+            /*background: {
               default: '#ffffff',
               paper: '#f9fafb', // Tailwind gray-50
-            },
+            },*/
             http: {
               get: '#10b981', // Tailwind emerald-500
               post: '#3b82f6', // Tailwind blue-500
@@ -39,7 +39,7 @@ export default function APIDocs() {
             fontFamily: 'Inter, sans-serif',
             headings: {
               fontWeight: '700',
-              color: '#111827', // Tailwind gray-900
+             // color: '#111827', // Tailwind gray-900
             },
             code: {
               backgroundColor: '#f3f4f6', // Tailwind gray-100

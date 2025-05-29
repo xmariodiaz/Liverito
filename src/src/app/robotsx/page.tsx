@@ -63,7 +63,7 @@ export default function RobotXPage() {
 
   // Apply status filter and keep sorted by ID
   useEffect(() => {
-    let list =
+    const list =
       statusFilter === 'all'
         ? [...robots]
         : robots.filter(r => r.status === statusFilter);
