@@ -2,63 +2,38 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# 1. Copy configuration files
+# 1. Copy configuration files first (for better layer caching)
 COPY package*.json ./
 COPY drizzle.config.ts ./
-COPY eslint.config.mjs ./
-COPY next-env.d.ts ./
-COPY next.config.ts ./
+COPY *.config.* ./
 COPY tsconfig.json ./
-COPY postcss.config.mjs ./
 
-# 2. Install dependencies (including devDependencies for build)
+# 2. Install dependencies
 RUN npm install --legacy-peer-deps
  
 # 3. Copy all source files
 COPY . .
 
-# 4. Build the application and generate Drizzle files
-# Accept the build argument
+# 4. Build with database configuration
 ARG DATABASE
-# Set as environment variable
-ENV DATABASE=$DATABASE
-# Your existing build steps
-
-RUN npm run build && \
-   # npm run drizzle:generate
+RUN DATABASE_URL=$DATABASE npm run drizzle:generate && \
+    npm run build
 
 # Stage 2: Production image
 FROM node:18-alpine
 WORKDIR /app
 
-# 1. Copy production dependencies
+# 1. Copy only necessary production files
 COPY --from=builder /app/node_modules ./node_modules
-
-# 2. Copy built application
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/drizzle ./drizzle
-COPY --from=builder /app/src ./src
-#COPY --from=builder /app/app ./app
-#COPY --from=builder /app/lib ./lib
-#COPY --from=builder /app/db ./db
-
-# 3. Copy configuration files
-
-RUN npm run drizzle:generate && npm run build
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/drizzle.config.ts ./
 
-# Environment variables
-#ENV NODE_ENV=production
-ENV PORT=8080 
-
-# Health check
+# 2. Health check and port configuration
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
-
-# Expose the port (matches your start script)
 EXPOSE 8080
 
-# Start the application
+# 3. Runtime command (environment variables injected via GitHub Actions)
 CMD ["npm", "start"]
