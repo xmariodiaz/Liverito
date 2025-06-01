@@ -28,11 +28,12 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build \
-          --file src/Dockerfile \
-          --build-arg DATABASE=${{ secrets.DATABASE }} \
-          -t us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcr.io/liverito:${{ github.sha }} \
-          src
+       docker build \
+        --file src/Dockerfile \
+        --build-arg DATABASE=${{ secrets.DATABASE }} \
+        --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} \
+        -t us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcr.io/liverito:${{ github.sha }} \
+        src
 
     - name: Push to Artifact Registry
       run: |
