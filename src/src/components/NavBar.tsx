@@ -13,7 +13,7 @@ export default function Navbar() {
             height={40} 
             className="mr-2"
           />
-          <span className="text-xl font-bold">Liverito</span>
+          <span className="text-xl font-bold">Liverito.Com</span>
         </Link>
         
         <div className="flex space-x-4">

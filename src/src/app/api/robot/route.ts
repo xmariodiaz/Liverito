@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Client } from "pg";
+// import { drizzle } from "drizzle-orm/node-postgres";
+// import { Client } from "pg";
 import { robot, order,client,restaurant, robotStatusEnum } from "@/db/schema";
 import type { RobotStatus, Robot, NewRobot } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { inArray } from "drizzle-orm";
-
-const pgclient = new Client({ connectionString: process.env.DATABASE });
-await pgclient.connect();
-const db = drizzle(pgclient);
+import { db } from "@/lib/db";
+// const pgclient = new Client({ connectionString: process.env.DATABASE });
+// await pgclient.connect();
+// const db = drizzle(pgclient);
 
 // Declaring types for security reasons
 /*const allowedStatuses: RobotStatus[] = robotStatusEnum.enumValues;

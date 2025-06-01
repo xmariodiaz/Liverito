@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Script from "next/script";
+//import Script from "next/script";
 import Roboo from "@/components/Roboo";
+import Loading from "@/components/Loading"
 import type { Robot as RoboType, RobotStatus } from "@/db/schema";
 import { robotStatusEnum } from "@/db/schema";
 
@@ -36,6 +37,7 @@ export default function RobotXPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | RobotStatus>('all');
   const [ordersMap, setOrdersMap] = useState<Record<number, OrderInfo[]>>({});
   const topRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load, attach addresses, and sort by ID
   useEffect(() => {
@@ -51,10 +53,14 @@ export default function RobotXPage() {
             return { ...r, address };
           })
         );
+        //setIsLoading(false);
         // Sort by robot ID ascending
         withAddress.sort((a, b) => a.id - b.id);
+        
+        //await new Promise(resolve => setTimeout(resolve, 100)); // 2 second delay
         setRobots(withAddress);
         setFiltered(withAddress);
+        setIsLoading(false);
       } catch (err) {
         console.error("Failed to fetch robots:", err);
       }
@@ -107,19 +113,19 @@ export default function RobotXPage() {
     }
   };
 
+  if (isLoading) {
+    return <Loading fullScreen text="Loading..." spinnerSize="lg" />;
+  }
+
   return (
     <>
-      {/* Preload Google Maps JS */}
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
-        strategy="beforeInteractive"
-      />
-
       <h1 className="text-2xl font-semibold mb-4">Robot Locator</h1>
       <div className="pl-8 pr-8 flex flex-col items-center">
         <div ref={topRef} />
         <div className="h-80 w-full mb-6">
-          <Roboo robots={selected ? [selected] : filtered} height="100%" />
+          <Roboo apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+      robots={selected ? [selected] : filtered}
+      center={{ lat: 0, lng: 0 }}  height="100%" />
         </div>
       </div>
 

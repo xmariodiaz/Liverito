@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Client } from "pg";
+///import { drizzle } from "drizzle-orm/node-postgres";
+//import { Client } from "pg";
 import { order, OrderStatus, orderStatusEnum } from "@/db/schema";
 import "dotenv/config";
 import { and, eq } from "drizzle-orm";
+import { db } from "@/lib/db";
 
-const client = new Client({ connectionString: process.env.DATABASE });
+
+/*const client = new Client({ connectionString: process.env.DATABASE });
 client.connect();
 const db = drizzle(client);
+*/
 
 /**
  * @swagger

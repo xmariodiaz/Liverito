@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Client as PgClient } from "pg";
+//import { drizzle } from "drizzle-orm/node-postgres";
+//import { Client as PgClient } from "pg";
 import { client as clientTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
 
-const pgClient = new PgClient({ connectionString: process.env.DATABASE });
-await pgClient.connect();
-const db = drizzle(pgClient);
+//const pgClient = new PgClient({ connectionString: process.env.DATABASE });
+//await pgClient.connect();
+//const db = drizzle(pgClient);
 
 ///customer?id=1
 /**

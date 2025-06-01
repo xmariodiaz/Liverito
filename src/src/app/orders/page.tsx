@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { order, restaurant, orderStatusEnum } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import type {OrderStatus} from "@/db/schema"
+import Loading from "@/components/Loading"
 const statusOptions: OrderStatus[] = orderStatusEnum.enumValues;
 
 const statusDisplay: Record<OrderStatus, { color: string; emoji: string }> = {
@@ -51,6 +52,7 @@ export default function OrderDashboardPage() {
   const [assigningOrderId, setAssigningOrderId] = useState<number | null>(null);
   const [clientSearch, setClientSearch] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,7 +94,7 @@ export default function OrderDashboardPage() {
             };
           })
         );
-
+        setIsLoading(false);
         ordersWithClientInfo.sort((a, b) => a.id - b.id);
         setOrders(ordersWithClientInfo);
       } catch (error) {
@@ -169,7 +171,9 @@ export default function OrderDashboardPage() {
       console.error("Failed to update status", err);
     }
   };
-
+  if (isLoading) {
+    return <Loading fullScreen text="Loading..." spinnerSize="lg" />;
+  }
   return (
     <div className="p-4">
       <div className="flex flex-wrap gap-4 mb-4">
@@ -231,6 +235,7 @@ export default function OrderDashboardPage() {
             <div>Client: {order.clientName}</div>
             <div>Restaurant: {order.restaurant?.name}</div>
             <div>Category: {order.restaurant?.category}</div>
+            <div>Robot: {order.robotId ?? 'N/A'}</div>
             <div className={`mt-2 ${getStatusDisplay(order.status).color}`}>
               {getStatusDisplay(order.status).emoji}
               <select

@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Client } from "pg";
-import { drizzle } from "drizzle-orm/node-postgres";
+// import { Client } from "pg";
+// import { drizzle } from "drizzle-orm/node-postgres";
 import { restaurant, restoCategoryEnum } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import type { Restaurant, NewRestaurant, RestoCategory } from "@/db/schema";
 
-const client = new Client({ connectionString: process.env.DATABASE });
-await client.connect();
-const db = drizzle(client);
-
+// const client = new Client({ connectionString: process.env.DATABASE });
+// await client.connect();
+// const db = drizzle(client);
+import { db } from "@/lib/db";
 /**
  * @swagger
  * /api/restaurants:
